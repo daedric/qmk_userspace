@@ -1,0 +1,7 @@
+:thier        -> their
+fitler        -> filter
+lenght        -> length
+ouput         -> output
+widht         -> width
+bandwith      -> bandwidth
+apss          -> pass
