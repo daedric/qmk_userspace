@@ -57,3 +57,10 @@ This can also be used to control which fork is used, though only upstream `qmk_f
 1. (First time only) `git submodule add https://github.com/qmk/qmk_firmware.git`
 1. (To update) `git submodule update --init --recursive`
 1. Commit your changes to your userspace repository
+
+
+# Ergol
+
+To generate the keymap:
+
+    python scripts/gen_keymap.py | clang-format > keyboards/zsa/moonlander/keymaps/ergol/keymap.c
