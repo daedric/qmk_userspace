@@ -45,7 +45,7 @@ static void init_led_for_input_mode(void) {
 #define GOLD HSV_C(0x24, 0xFF, 0xFF)
 #define WHITE HSV_C(0x0, 0x0, 0xFF)
 #define ORANG HSV_C(0x15, 0xFF, 0xFF)
-#define BLUE HSV_C(0xC8, 0xFF, 0xFF)
+#define BLUE HSV_C(0xAC, 0xFF, 0xFF)
 
 enum layers { Base, Qwerty, DK, Sym, Media, Fn };
 
