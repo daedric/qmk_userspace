@@ -907,10 +907,10 @@ static bool _autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *r
         uint32_t skc = unicodemap_get_code_point(skc_or_skc_idx);
         register_unicode(skc);
         set_mods(temp_mod);
-    } else {
-        register_code16(!shifted ? kc : skc_or_skc_idx);
+        return false;
     }
 
+    register_code16(!shifted ? kc : skc_or_skc_idx);
     return true;
 }
 void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
@@ -1228,7 +1228,7 @@ static bool _autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t 
     }
 
     if (shifted && tap_unicode) {
-        return true;
+        return false;
     }
 
     unregister_code16(!shifted ? kc : skc_or_skc_idx);

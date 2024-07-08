@@ -637,10 +637,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {{
                 uint32_t skc = unicodemap_get_code_point(skc_or_skc_idx);
                 register_unicode(skc);
                 set_mods(temp_mod);
-            }} else {{
-                register_code16(!shifted ? kc : skc_or_skc_idx);
+                return false;
             }}
 
+            register_code16(!shifted ? kc : skc_or_skc_idx);
             return true;
         }}
         void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {{
@@ -686,7 +686,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {{
             {switch}
 
             if (shifted && tap_unicode) {{
-                    return true;
+                    return false;
             }}
 
             unregister_code16(!shifted ? kc : skc_or_skc_idx);
