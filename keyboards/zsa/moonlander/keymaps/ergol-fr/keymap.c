@@ -6,6 +6,9 @@
 #include "keycodes.h"
 #include "version.h"
 
+#include "keymap_french.h"
+#include "sendstring_french.h"
+
 enum layers {
     Base,
     DK,
@@ -22,8 +25,12 @@ enum custom_keycodes {
     Base_EKC_1,
     Base_EKC_2,
     Base_EKC_3,
+    Base_EKC_6,
     Base_EKC_SPC,
-    Sym_EKC_Q,
+    DK_EKC_C,
+    DK_EKC_A,
+    DK_EKC_S,
+    DK_EKC_E,
     Sym_EKC_C,
     Sym_EKC_O,
     Sym_EKC_W,
@@ -53,19 +60,13 @@ enum custom_keycodes {
 #define DK_EKC_3 UP(RIGHT_DOUBLE_QUOTATION_MARK, RIGHT_SINGLE_QUOTATION_MARK)
 #define DK_EKC_4 UM(CENT_SIGN)
 #define DK_EKC_5 UM(PER_MILLE_SIGN)
-#define DK_EKC_8 UM(SECTION_SIGN)
 #define DK_EKC_9 UM(PILCROW_SIGN)
-#define DK_EKC_0 UM(DEGREE_SIGN)
 #define DK_EKC_Q UP(LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX, LATIN_CAPITAL_LETTER_A_WITH_CIRCUMFLEX)
-#define DK_EKC_C UP(LATIN_SMALL_LETTER_C_WITH_CEDILLA, LATIN_CAPITAL_LETTER_C_WITH_CEDILLA)
 #define DK_EKC_O UP(LATIN_SMALL_LIGATURE_OE, LATIN_CAPITAL_LIGATURE_OE)
 #define DK_EKC_P UP(LATIN_SMALL_LETTER_O_WITH_CIRCUMFLEX, LATIN_CAPITAL_LETTER_O_WITH_CIRCUMFLEX)
 #define DK_EKC_M UM(MICRO_SIGN)
 #define DK_EKC_DK UP(COMBINING_DIAERESIS, INVERTED_EXCLAMATION_MARK)
 #define DK_EKC_Y UP(LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX, LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX)
-#define DK_EKC_A UP(LATIN_SMALL_LETTER_A_WITH_GRAVE, LATIN_CAPITAL_LETTER_A_WITH_GRAVE)
-#define DK_EKC_S UP(LATIN_SMALL_LETTER_E_WITH_ACUTE, LATIN_CAPITAL_LETTER_E_WITH_ACUTE)
-#define DK_EKC_E UP(LATIN_SMALL_LETTER_E_WITH_GRAVE, LATIN_CAPITAL_LETTER_E_WITH_GRAVE)
 #define DK_EKC_N UP(LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX, LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX)
 #define DK_EKC_F UP(LATIN_SMALL_LETTER_N_WITH_TILDE, LATIN_CAPITAL_LETTER_N_WITH_TILDE)
 #define DK_EKC_T UP(LATIN_SMALL_LETTER_I_WITH_CIRCUMFLEX, LATIN_CAPITAL_LETTER_I_WITH_CIRCUMFLEX)
@@ -88,12 +89,13 @@ enum custom_keycodes {
 #define Sym_EKC_8 UP(SUBSCRIPT_EIGHT, SUPERSCRIPT_EIGHT)
 #define Sym_EKC_9 UP(SUBSCRIPT_NINE, SUPERSCRIPT_NINE)
 #define Sym_EKC_0 UP(SUBSCRIPT_ZERO, SUPERSCRIPT_ZERO)
+#define Sym_EKC_Q UP(CIRCUMFLEX_ACCENT, COMBINING_CIRCUMFLEX_ACCENT)
 
 enum unicode_names {
     LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX,
     LATIN_CAPITAL_LETTER_A_WITH_CIRCUMFLEX,
+    CIRCUMFLEX_ACCENT,
     COMBINING_CIRCUMFLEX_ACCENT,
-    LATIN_SMALL_LETTER_C_WITH_CEDILLA,
     LATIN_CAPITAL_LETTER_C_WITH_CEDILLA,
     LESS_THAN_OR_EQUAL_TO,
     LATIN_SMALL_LIGATURE_OE,
@@ -111,12 +113,9 @@ enum unicode_names {
     LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX,
     LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX,
     COMBINING_GRAVE_ACCENT,
-    LATIN_SMALL_LETTER_A_WITH_GRAVE,
     LATIN_CAPITAL_LETTER_A_WITH_GRAVE,
     COMBINING_CARON,
-    LATIN_SMALL_LETTER_E_WITH_ACUTE,
     LATIN_CAPITAL_LETTER_E_WITH_ACUTE,
-    LATIN_SMALL_LETTER_E_WITH_GRAVE,
     LATIN_CAPITAL_LETTER_E_WITH_GRAVE,
     LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX,
     LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX,
@@ -177,13 +176,11 @@ enum unicode_names {
     SUPERSCRIPT_SIX,
     SUBSCRIPT_SEVEN,
     SUPERSCRIPT_SEVEN,
-    SECTION_SIGN,
     SUBSCRIPT_EIGHT,
     SUPERSCRIPT_EIGHT,
     PILCROW_SIGN,
     SUBSCRIPT_NINE,
     SUPERSCRIPT_NINE,
-    DEGREE_SIGN,
     SUBSCRIPT_ZERO,
     SUPERSCRIPT_ZERO,
     NARROW_NO_BREAK_SPACE,
@@ -192,8 +189,8 @@ enum unicode_names {
 const uint32_t PROGMEM unicode_map[] = {
     [LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX]       = 0x00e2 /* â */,
     [LATIN_CAPITAL_LETTER_A_WITH_CIRCUMFLEX]     = 0x00c2 /* Â */,
+    [CIRCUMFLEX_ACCENT]                          = 0x005e /* ^ */,
     [COMBINING_CIRCUMFLEX_ACCENT]                = 0x0302 /* ̂ */,
-    [LATIN_SMALL_LETTER_C_WITH_CEDILLA]          = 0x00e7 /* ç */,
     [LATIN_CAPITAL_LETTER_C_WITH_CEDILLA]        = 0x00c7 /* Ç */,
     [LESS_THAN_OR_EQUAL_TO]                      = 0x2264 /* ≤ */,
     [LATIN_SMALL_LIGATURE_OE]                    = 0x0153 /* œ */,
@@ -211,12 +208,9 @@ const uint32_t PROGMEM unicode_map[] = {
     [LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX]       = 0x00fb /* û */,
     [LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX]     = 0x00db /* Û */,
     [COMBINING_GRAVE_ACCENT]                     = 0x0300 /* ̀ */,
-    [LATIN_SMALL_LETTER_A_WITH_GRAVE]            = 0x00e0 /* à */,
     [LATIN_CAPITAL_LETTER_A_WITH_GRAVE]          = 0x00c0 /* À */,
     [COMBINING_CARON]                            = 0x030c /* ̌ */,
-    [LATIN_SMALL_LETTER_E_WITH_ACUTE]            = 0x00e9 /* é */,
     [LATIN_CAPITAL_LETTER_E_WITH_ACUTE]          = 0x00c9 /* É */,
-    [LATIN_SMALL_LETTER_E_WITH_GRAVE]            = 0x00e8 /* è */,
     [LATIN_CAPITAL_LETTER_E_WITH_GRAVE]          = 0x00c8 /* È */,
     [LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX]       = 0x00ea /* ê */,
     [LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX]     = 0x00ca /* Ê */,
@@ -277,52 +271,51 @@ const uint32_t PROGMEM unicode_map[] = {
     [SUPERSCRIPT_SIX]                            = 0x2076 /* ⁶ */,
     [SUBSCRIPT_SEVEN]                            = 0x2087 /* ₇ */,
     [SUPERSCRIPT_SEVEN]                          = 0x2077 /* ⁷ */,
-    [SECTION_SIGN]                               = 0x00a7 /* § */,
     [SUBSCRIPT_EIGHT]                            = 0x2088 /* ₈ */,
     [SUPERSCRIPT_EIGHT]                          = 0x2078 /* ⁸ */,
     [PILCROW_SIGN]                               = 0x00b6 /* ¶ */,
     [SUBSCRIPT_NINE]                             = 0x2089 /* ₉ */,
     [SUPERSCRIPT_NINE]                           = 0x2079 /* ⁹ */,
-    [DEGREE_SIGN]                                = 0x00b0 /* ° */,
     [SUBSCRIPT_ZERO]                             = 0x2080 /* ₀ */,
     [SUPERSCRIPT_ZERO]                           = 0x2070 /* ⁰ */,
     [NARROW_NO_BREAK_SPACE]                      = 0x202f /*   */,
 };
 
-const key_override_t Base_EKC_4    = ko_make_with_layers(MOD_MASK_SHIFT, KC_4, KC_DLR, (1 << Base));
-const key_override_t Base_EKC_5    = ko_make_with_layers(MOD_MASK_SHIFT, KC_5, KC_PERC, (1 << Base));
-const key_override_t Base_EKC_6    = ko_make_with_layers(MOD_MASK_SHIFT, KC_6, KC_CIRC, (1 << Base));
-const key_override_t Base_EKC_7    = ko_make_with_layers(MOD_MASK_SHIFT, KC_7, KC_AMPR, (1 << Base));
-const key_override_t Base_EKC_8    = ko_make_with_layers(MOD_MASK_SHIFT, KC_8, KC_ASTR, (1 << Base));
-const key_override_t Base_EKC_9    = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_HASH, (1 << Base));
-const key_override_t Base_EKC_0    = ko_make_with_layers(MOD_MASK_SHIFT, KC_0, KC_AT, (1 << Base));
+const key_override_t Base_EKC_4    = ko_make_with_layers(MOD_MASK_SHIFT, FR_4, FR_DLR, (1 << Base));
+const key_override_t Base_EKC_5    = ko_make_with_layers(MOD_MASK_SHIFT, FR_5, FR_PERC, (1 << Base));
+const key_override_t Base_EKC_7    = ko_make_with_layers(MOD_MASK_SHIFT, FR_7, FR_AMPR, (1 << Base));
+const key_override_t Base_EKC_8    = ko_make_with_layers(MOD_MASK_SHIFT, FR_8, FR_ASTR, (1 << Base));
+const key_override_t Base_EKC_9    = ko_make_with_layers(MOD_MASK_SHIFT, FR_9, FR_HASH, (1 << Base));
+const key_override_t Base_EKC_0    = ko_make_with_layers(MOD_MASK_SHIFT, FR_0, FR_AT, (1 << Base));
 const key_override_t Base_EKC_DK   = ko_make_with_layers(MOD_MASK_SHIFT, OSL(DK), KC_EXLM, (1 << Base));
-const key_override_t Base_EKC_MNS  = ko_make_with_layers(MOD_MASK_SHIFT, KC_MINS, KC_QUES, (1 << Base));
-const key_override_t Base_EKC_DOT  = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_COLN, (1 << Base));
-const key_override_t Base_EKC_COMM = ko_make_with_layers(MOD_MASK_SHIFT, KC_COMM, KC_SCLN, (1 << Base));
-const key_override_t DK_EKC_D      = ko_make_with_layers(MOD_MASK_SHIFT, KC_UNDS, KC_UNDS, (1 << DK));
-const key_override_t DK_EKC_L      = ko_make_with_layers(MOD_MASK_SHIFT, KC_LPRN, KC_LPRN, (1 << DK));
-const key_override_t DK_EKC_R      = ko_make_with_layers(MOD_MASK_SHIFT, KC_RPRN, KC_RPRN, (1 << DK));
-const key_override_t Sym_EKC_P     = ko_make_with_layers(MOD_MASK_SHIFT, KC_DLR, KC_DLR, (1 << Sym));
-const key_override_t Sym_EKC_M     = ko_make_with_layers(MOD_MASK_SHIFT, KC_AMPR, KC_AMPR, (1 << Sym));
-const key_override_t Sym_EKC_S     = ko_make_with_layers(MOD_MASK_SHIFT, KC_LPRN, KC_LPRN, (1 << Sym));
-const key_override_t Sym_EKC_E     = ko_make_with_layers(MOD_MASK_SHIFT, KC_RPRN, KC_RPRN, (1 << Sym));
-const key_override_t Sym_EKC_B     = ko_make_with_layers(MOD_MASK_SHIFT, KC_HASH, KC_HASH, (1 << Sym));
-const key_override_t Sym_EKC_COMM  = ko_make_with_layers(MOD_MASK_SHIFT, KC_COLN, KC_COLN, (1 << Sym));
+const key_override_t Base_EKC_MNS  = ko_make_with_layers(MOD_MASK_SHIFT, FR_MINS, FR_QUES, (1 << Base));
+const key_override_t Base_EKC_DOT  = ko_make_with_layers(MOD_MASK_SHIFT, FR_DOT, FR_COLN, (1 << Base));
+const key_override_t Base_EKC_COMM = ko_make_with_layers(MOD_MASK_SHIFT, FR_COMM, FR_SCLN, (1 << Base));
+const key_override_t DK_EKC_8      = ko_make_with_layers(MOD_MASK_SHIFT, FR_SECT, FR_SECT, (1 << DK));
+const key_override_t DK_EKC_0      = ko_make_with_layers(MOD_MASK_SHIFT, FR_DEG, FR_DEG, (1 << DK));
+const key_override_t DK_EKC_D      = ko_make_with_layers(MOD_MASK_SHIFT, FR_UNDS, FR_UNDS, (1 << DK));
+const key_override_t DK_EKC_L      = ko_make_with_layers(MOD_MASK_SHIFT, FR_LPRN, FR_LPRN, (1 << DK));
+const key_override_t DK_EKC_R      = ko_make_with_layers(MOD_MASK_SHIFT, FR_RPRN, FR_RPRN, (1 << DK));
+const key_override_t Sym_EKC_P     = ko_make_with_layers(MOD_MASK_SHIFT, FR_DLR, FR_DLR, (1 << Sym));
+const key_override_t Sym_EKC_M     = ko_make_with_layers(MOD_MASK_SHIFT, FR_AMPR, FR_AMPR, (1 << Sym));
+const key_override_t Sym_EKC_S     = ko_make_with_layers(MOD_MASK_SHIFT, FR_LPRN, FR_LPRN, (1 << Sym));
+const key_override_t Sym_EKC_E     = ko_make_with_layers(MOD_MASK_SHIFT, FR_RPRN, FR_RPRN, (1 << Sym));
+const key_override_t Sym_EKC_B     = ko_make_with_layers(MOD_MASK_SHIFT, FR_HASH, FR_HASH, (1 << Sym));
+const key_override_t Sym_EKC_COMM  = ko_make_with_layers(MOD_MASK_SHIFT, FR_COLN, FR_COLN, (1 << Sym));
 const key_override_t Sym_EKC_SPC   = ko_make_with_layers(MOD_MASK_SHIFT, KC_SPC, KC_SPC, (1 << Sym));
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &Base_EKC_4, &Base_EKC_5, &Base_EKC_6, &Base_EKC_7, &Base_EKC_8, &Base_EKC_9, &Base_EKC_0, &Base_EKC_DK, &Base_EKC_MNS, &Base_EKC_DOT, &Base_EKC_COMM, &DK_EKC_D, &DK_EKC_L, &DK_EKC_R, &Sym_EKC_P, &Sym_EKC_M, &Sym_EKC_S, &Sym_EKC_E, &Sym_EKC_B, &Sym_EKC_COMM, &Sym_EKC_SPC, NULL,
+    &Base_EKC_4, &Base_EKC_5, &Base_EKC_7, &Base_EKC_8, &Base_EKC_9, &Base_EKC_0, &Base_EKC_DK, &Base_EKC_MNS, &Base_EKC_DOT, &Base_EKC_COMM, &DK_EKC_8, &DK_EKC_0, &DK_EKC_D, &DK_EKC_L, &DK_EKC_R, &Sym_EKC_P, &Sym_EKC_M, &Sym_EKC_S, &Sym_EKC_E, &Sym_EKC_B, &Sym_EKC_COMM, &Sym_EKC_SPC, NULL,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [Base] = LAYOUT(
         // clang-format off
 
-            KC_ESC    ,   Base_EKC_1  ,   Base_EKC_2  ,   Base_EKC_3  ,      KC_4     ,      KC_5     , LT(Fn, KC_ESC),           LT(Fn, KC_ESC),      KC_6     ,      KC_7     ,      KC_8     ,      KC_9     ,      KC_0     ,     KC_INS    ,
-            KC_TAB    ,      KC_Q     ,      KC_C     ,      KC_O     ,      KC_P     ,      KC_W     ,     KC_DEL    ,              KC_BSPC    ,      KC_J     ,      KC_M     ,      KC_D     ,    OSL(DK)    ,      KC_Y     ,    _______    ,
-            KC_GRV    ,      KC_A     ,      KC_S     ,      KC_E     ,      KC_N     ,      KC_F     ,    _______    ,              _______    ,      KC_L     ,      KC_R     ,      KC_T     ,      KC_I     ,    _______    ,    _______    ,
-           KC_LSFT    ,      KC_Z     ,      KC_X     ,    KC_MINS    ,      KC_V     ,      KC_B     ,                       KC_DOT    ,      KC_H     ,      KC_G     ,    KC_COMM    ,      KC_K     ,    KC_RSFT    ,
+            KC_ESC    ,   Base_EKC_1  ,   Base_EKC_2  ,   Base_EKC_3  ,      FR_4     ,      FR_5     , LT(Fn, KC_ESC),           LT(Fn, KC_ESC),   Base_EKC_6  ,      FR_7     ,      FR_8     ,      FR_9     ,      FR_0     ,     KC_INS    ,
+            KC_TAB    ,      FR_Q     ,      FR_C     ,      FR_O     ,      FR_P     ,      FR_W     ,     KC_DEL    ,              KC_BSPC    ,      FR_J     ,      FR_M     ,      FR_D     ,    OSL(DK)    ,      FR_Y     ,    _______    ,
+            KC_GRV    ,      FR_A     ,      FR_S     ,      FR_E     ,      FR_N     ,      FR_F     ,    _______    ,              _______    ,      FR_L     ,      FR_R     ,      FR_T     ,      FR_I     ,    _______    ,    _______    ,
+           KC_LSFT    ,      FR_Z     ,      FR_X     ,    FR_MINS    ,      FR_V     ,      FR_B     ,                       FR_DOT    ,      FR_H     ,      FR_G     ,    FR_COMM    ,      FR_K     ,    KC_RSFT    ,
            KC_LCTL    ,    _______    ,    KC_LEFT    ,    KC_RIGHT   ,    KC_LGUI    ,            _______    ,        _______    ,           KC_UP     ,    KC_DOWN    ,    _______    ,    _______    ,    _______    ,
                                MO(Sym)    ,    _______    ,    _______    ,        KC_LALT    ,    KC_ENTER   ,  Base_EKC_SPC
 
@@ -331,9 +324,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [DK] = LAYOUT(
         // clang-format off
 
-          _______  ,  DK_EKC_1  ,  DK_EKC_2  ,  DK_EKC_3  ,  DK_EKC_4  ,  DK_EKC_5  ,   _______  ,             _______  ,   _______  ,   _______  ,  DK_EKC_8  ,  DK_EKC_9  ,  DK_EKC_0  ,   _______  ,
-          _______  ,  DK_EKC_Q  ,  DK_EKC_C  ,  DK_EKC_O  ,  DK_EKC_P  ,   _______  ,   _______  ,             _______  ,   _______  ,  DK_EKC_M  ,   KC_UNDS  ,  DK_EKC_DK ,  DK_EKC_Y  ,   _______  ,
-          _______  ,  DK_EKC_A  ,  DK_EKC_S  ,  DK_EKC_E  ,  DK_EKC_N  ,  DK_EKC_F  ,   _______  ,             _______  ,   KC_LPRN  ,   KC_RPRN  ,  DK_EKC_T  ,  DK_EKC_I  ,   _______  ,   _______  ,
+          _______  ,  DK_EKC_1  ,  DK_EKC_2  ,  DK_EKC_3  ,  DK_EKC_4  ,  DK_EKC_5  ,   _______  ,             _______  ,   _______  ,   _______  ,   FR_SECT  ,  DK_EKC_9  ,   FR_DEG   ,   _______  ,
+          _______  ,  DK_EKC_Q  ,  DK_EKC_C  ,  DK_EKC_O  ,  DK_EKC_P  ,   _______  ,   _______  ,             _______  ,   _______  ,  DK_EKC_M  ,   FR_UNDS  ,  DK_EKC_DK ,  DK_EKC_Y  ,   _______  ,
+          _______  ,  DK_EKC_A  ,  DK_EKC_S  ,  DK_EKC_E  ,  DK_EKC_N  ,  DK_EKC_F  ,   _______  ,             _______  ,   FR_LPRN  ,   FR_RPRN  ,  DK_EKC_T  ,  DK_EKC_I  ,   _______  ,   _______  ,
           _______  ,  DK_EKC_Z  ,  DK_EKC_X  , DK_EKC_MNS ,  DK_EKC_V  ,  DK_EKC_B  ,                   DK_EKC_DOT ,   _______  ,   _______  , DK_EKC_COMM,   _______  ,   _______  ,
           _______  ,   _______  ,   _______  ,   _______  ,   _______  ,           _______  ,       _______  ,         _______  ,   _______  ,   _______  ,   _______  ,   _______  ,
                               _______  ,   _______  ,   _______  ,       _______  ,   _______  , DK_EKC_SPC
@@ -344,9 +337,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // clang-format off
 
           _______  ,  Sym_EKC_1 ,  Sym_EKC_2 ,  Sym_EKC_3 ,  Sym_EKC_4 ,  Sym_EKC_5 ,   _______  ,             _______  ,  Sym_EKC_6 ,  Sym_EKC_7 ,  Sym_EKC_8 ,  Sym_EKC_9 ,  Sym_EKC_0 ,   _______  ,
-          _______  ,  Sym_EKC_Q ,  Sym_EKC_C ,  Sym_EKC_O ,   KC_DLR   ,  Sym_EKC_W ,   _______  ,             _______  ,  Sym_EKC_J ,   KC_AMPR  ,  Sym_EKC_D , Sym_EKC_DK ,  Sym_EKC_Y ,   _______  ,
-          _______  ,  Sym_EKC_A ,   KC_LPRN  ,   KC_RPRN  ,  Sym_EKC_N ,  Sym_EKC_F ,   _______  ,             _______  ,  Sym_EKC_L ,  Sym_EKC_R ,  Sym_EKC_T ,  Sym_EKC_I ,   _______  ,   _______  ,
-          _______  ,  Sym_EKC_Z ,  Sym_EKC_X , Sym_EKC_MNS,  Sym_EKC_V ,   KC_HASH  ,                   Sym_EKC_DOT,  Sym_EKC_H ,  Sym_EKC_G ,   KC_COLN  ,  Sym_EKC_K ,   _______  ,
+          _______  ,  Sym_EKC_Q ,  Sym_EKC_C ,  Sym_EKC_O ,   FR_DLR   ,  Sym_EKC_W ,   _______  ,             _______  ,  Sym_EKC_J ,   FR_AMPR  ,  Sym_EKC_D , Sym_EKC_DK ,  Sym_EKC_Y ,   _______  ,
+          _______  ,  Sym_EKC_A ,   FR_LPRN  ,   FR_RPRN  ,  Sym_EKC_N ,  Sym_EKC_F ,   _______  ,             _______  ,  Sym_EKC_L ,  Sym_EKC_R ,  Sym_EKC_T ,  Sym_EKC_I ,   _______  ,   _______  ,
+          _______  ,  Sym_EKC_Z ,  Sym_EKC_X , Sym_EKC_MNS,  Sym_EKC_V ,   FR_HASH  ,                   Sym_EKC_DOT,  Sym_EKC_H ,  Sym_EKC_G ,   FR_COLN  ,  Sym_EKC_K ,   _______  ,
           _______  ,   _______  ,   _______  ,   _______  ,   _______  ,           _______  ,       _______  ,         _______  ,   _______  ,   _______  ,   _______  ,   _______  ,
                               _______  ,   _______  ,   _______  ,       _______  ,   _______  ,   KC_SPC
 
@@ -396,18 +389,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
 
         case Base_EKC_1:
-            kc      = KC_1;
+            kc      = FR_1;
             skc_idx = EURO_SIGN;
             break;
 
         case Base_EKC_2:
-            kc      = KC_2;
+            kc      = FR_2;
             skc_idx = LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK;
             break;
 
         case Base_EKC_3:
-            kc      = KC_3;
+            kc      = FR_3;
             skc_idx = RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK;
+            break;
+
+        case Base_EKC_6:
+            kc      = FR_6;
+            skc_idx = CIRCUMFLEX_ACCENT;
             break;
 
         case Base_EKC_SPC:
@@ -415,118 +413,133 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             skc_idx = NARROW_NO_BREAK_SPACE;
             break;
 
-        case Sym_EKC_Q:
-            kc      = KC_CIRC;
-            skc_idx = COMBINING_CIRCUMFLEX_ACCENT;
+        case DK_EKC_C:
+            kc      = FR_CCED;
+            skc_idx = LATIN_CAPITAL_LETTER_C_WITH_CEDILLA;
+            break;
+
+        case DK_EKC_A:
+            kc      = FR_AGRV;
+            skc_idx = LATIN_CAPITAL_LETTER_A_WITH_GRAVE;
+            break;
+
+        case DK_EKC_S:
+            kc      = FR_EACU;
+            skc_idx = LATIN_CAPITAL_LETTER_E_WITH_ACUTE;
+            break;
+
+        case DK_EKC_E:
+            kc      = FR_EGRV;
+            skc_idx = LATIN_CAPITAL_LETTER_E_WITH_GRAVE;
             break;
 
         case Sym_EKC_C:
-            kc      = KC_LABK;
+            kc      = FR_LABK;
             skc_idx = LESS_THAN_OR_EQUAL_TO;
             break;
 
         case Sym_EKC_O:
-            kc      = KC_RABK;
+            kc      = FR_RABK;
             skc_idx = GREATER_THAN_OR_EQUAL_TO;
             break;
 
         case Sym_EKC_W:
-            kc      = KC_PERC;
+            kc      = FR_PERC;
             skc_idx = PER_MILLE_SIGN;
             break;
 
         case Sym_EKC_J:
-            kc      = KC_AT;
+            kc      = FR_AT;
             skc_idx = COMBINING_RING_ABOVE;
             break;
 
         case Sym_EKC_D:
-            kc      = KC_ASTR;
+            kc      = FR_ASTR;
             skc_idx = MULTIPLICATION_SIGN;
             break;
 
         case Sym_EKC_DK:
-            kc      = KC_QUOT;
+            kc      = FR_QUOT;
             skc_idx = COMBINING_ACUTE_ACCENT;
             break;
 
         case Sym_EKC_Y:
-            kc      = KC_GRV;
+            kc      = FR_GRV;
             skc_idx = COMBINING_GRAVE_ACCENT;
             break;
 
         case Sym_EKC_A:
-            kc      = KC_LCBR;
+            kc      = FR_LCBR;
             skc_idx = COMBINING_CARON;
             break;
 
         case Sym_EKC_N:
-            kc      = KC_RCBR;
+            kc      = FR_RCBR;
             skc_idx = COMBINING_DOT_ABOVE;
             break;
 
         case Sym_EKC_F:
-            kc      = KC_EQL;
+            kc      = FR_EQL;
             skc_idx = NOT_EQUAL_TO;
             break;
 
         case Sym_EKC_L:
-            kc      = KC_BSLS;
+            kc      = FR_BSLS;
             skc_idx = COMBINING_LONG_SOLIDUS_OVERLAY;
             break;
 
         case Sym_EKC_R:
-            kc      = KC_PLUS;
+            kc      = FR_PLUS;
             skc_idx = PLUS_SIGN_ABOVE_EQUALS_SIGN;
             break;
 
         case Sym_EKC_T:
-            kc      = KC_MINS;
+            kc      = FR_MINS;
             skc_idx = COMBINING_MACRON;
             break;
 
         case Sym_EKC_I:
-            kc      = KC_SLSH;
+            kc      = FR_SLSH;
             skc_idx = DIVISION_SIGN;
             break;
 
         case Sym_EKC_Z:
-            kc      = KC_TILD;
+            kc      = FR_TILD;
             skc_idx = COMBINING_TILDE;
             break;
 
         case Sym_EKC_X:
-            kc      = KC_LBRC;
+            kc      = FR_LBRC;
             skc_idx = COMBINING_COMMA_BELOW;
             break;
 
         case Sym_EKC_MNS:
-            kc      = KC_RBRC;
+            kc      = FR_RBRC;
             skc_idx = COMBINING_OGONEK;
             break;
 
         case Sym_EKC_V:
-            kc      = KC_UNDS;
+            kc      = FR_UNDS;
             skc_idx = EN_DASH;
             break;
 
         case Sym_EKC_DOT:
-            kc      = KC_PIPE;
+            kc      = FR_PIPE;
             skc_idx = BROKEN_BAR;
             break;
 
         case Sym_EKC_H:
-            kc      = KC_EXLM;
+            kc      = FR_EXLM;
             skc_idx = NOT_SIGN;
             break;
 
         case Sym_EKC_G:
-            kc      = KC_SCLN;
+            kc      = FR_SCLN;
             skc_idx = COMBINING_TURNED_COMMA_ABOVE;
             break;
 
         case Sym_EKC_K:
-            kc      = KC_QUES;
+            kc      = FR_QUES;
             skc_idx = COMBINING_BREVE;
             break;
     }
