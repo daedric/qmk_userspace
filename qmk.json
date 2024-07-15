@@ -3,6 +3,6 @@
     "build_targets": [
         ["zsa/moonlander", "daedric"],
         ["zsa/moonlander", "ergol"],
-        ["zsa/moonlander", "ergol-fr"]
+        ["zsa/moonlander", "ergolfr"]
     ]
 }
