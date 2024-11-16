@@ -57,21 +57,102 @@ def is_unicode(kc) -> bool:
     return isinstance(kc, int)
 
 
-def parse_lt(kc):
-    pattern = re.compile(r"^LT\((?P<layer>\w+)\|\s*(?P<keycode>\w+)\)$")
-    if match := pattern.match(kc):
-        return match.group("layer"), match.group("keycode")
-    raise ValueError("kc does not match the expected format LT(layer|keycode)")
+class LTFunction:
+    def __init__(self, layer, kc):
+        self.layer = layer
+        self.kc = kc
+
+    @staticmethod
+    def parse(kc: str):
+        pattern = re.compile(r"^LT\((?P<layer>\w+)\|\s*(?P<keycode>\w+)\)$")
+        if match := pattern.match(kc):
+            return LTFunction(match.group("layer"), match.group("keycode"))
+
+        return None
+
+    def __call__(self, kc):
+        return f"LT({self.layer}, {kc})"
+
+
+class UnaryKCFunction:
+    _known_functions = {
+        # incomplete
+        # https://docs.qmk.fm/mod_tap
+        "ALGR_T",
+        "ALL_T",
+        "ALT_T",
+        "CMD_T",
+        "CTL_T",
+        "CTL_T",
+        "C_S_T",
+        "GUI_T",
+        "HYPR_T",
+        "LAG_T",
+        "LALT_T",
+        "LCAG_T",
+        "LCA_T",
+        "LCMD_T",
+        "LCTL_T",
+        "LOPT_T",
+        "LSA_T",
+        "LSFT_T",
+        "LSG_T",
+        "LWIN_T",
+        "MEH_T",
+        "OPT_T",
+        "RALT_T",
+        "RCAG_T",
+        "RCMD_T",
+        "RGUI_T",
+        "ROPT_T",
+        "RSA_T",
+        "RSG_T",
+        "RWIN_T",
+        "SAGR_T",
+        "SCMD_T",
+        "SFT_T",
+        "SFT_T",
+        "SGUI_T",
+        "SWIN_T",
+        "WIN_T",
+    }
+
+    def __init__(self, fn, kc):
+        self.fn = fn
+        self.kc = kc
+
+    @classmethod
+    def parse(cls, kc: str):
+        for kf in cls._known_functions:
+            if kc.startswith(kf):
+                break
+        else:
+            return None
+        pattern = re.compile(r"(?P<fn>\w+)\((?P<keycode>\w+)\)")
+        match = pattern.match(kc)
+        return UnaryKCFunction(match.group("fn"), match.group("keycode"))
+
+    def __call__(self, kc):
+        return f"{self.fn}({kc})"
+
+
+_functions = (
+    LTFunction,
+    UnaryKCFunction,
+)
 
 
 class KeyCode:
     def __init__(self, kc: str | int):
         self._kc: str | int = kc
         self._layer: str | None = None
-        self._fn: str | None = None
-        if isinstance(kc, str) and kc.startswith("LT"):
-            self._layer, self._kc = parse_lt(kc)
-            self._fn = "LT"
+        self._fn: LTFunction | UnaryKCFunction | None = None
+        if isinstance(kc, str):
+            for fn in _functions:
+                self._fn = fn.parse(kc)
+                if self._fn:
+                    self._kc = self._fn.kc
+                    break
 
     @property
     def has_function(self):
@@ -107,7 +188,7 @@ class KeyCode:
     @property
     def kc(self):
         if self.has_function:
-            return f"{self._fn}({self.layer}, {self._kc})"
+            return self._fn(self._kc)
         return self._kc
 
     def __str__(self):
@@ -128,7 +209,7 @@ class KeyCode:
 
     def __format__(self, format_spec):
         if self.has_function:
-            return f"{self._fn}({self.layer}, {format(self._kc, format_spec)})"
+            return self._fn(self._kc)
         return format(self._kc, format_spec)
 
     def __len__(self):
