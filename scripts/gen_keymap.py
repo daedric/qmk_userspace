@@ -513,7 +513,7 @@ class Gen:
         tpl = """
         {overrides}
 
-        const key_override_t **key_overrides = (const key_override_t *[]){{
+        const key_override_t *key_overrides[] = (const key_override_t *[]){{
             {override_names},
             NULL,
         }};

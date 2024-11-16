@@ -6,6 +6,7 @@ UNICODEMAP_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes
 
 
+NKRO_ENABLE = yes
 MUSIC_ENABLE = no
 AUDIO_ENABLE = no
 # do not work with the dead key and overrides/UM()
