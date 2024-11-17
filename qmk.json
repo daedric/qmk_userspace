@@ -2,6 +2,7 @@
     "userspace_version": "1.0",
     "build_targets": [
         ["zsa/moonlander", "daedric"],
+        ["zsa/moonlander", "daedric_34"],
         ["zsa/moonlander", "ergol"],
         ["zsa/moonlander", "ergolfr"]
     ]
