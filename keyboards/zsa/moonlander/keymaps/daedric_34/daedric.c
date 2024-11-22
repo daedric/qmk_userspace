@@ -69,7 +69,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
-    [Base]   = {LED_LAYOUT(
+    [Base]      = {LED_LAYOUT(
         // clang-format off
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, GREEN,           GREEN, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, GOLD , BLACK, BLACK,
@@ -79,9 +79,9 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
                                     PURPL, BLACK, BLACK,      BLACK, BLACK, PURPL
         // clang-format on
         )},
-      [Qwerty] = {LED_LAYOUT(
+         [Qwerty] = {LED_LAYOUT(
         // clang-format off
-        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, GREEN,           GREEN, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, RED  , BLACK,
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,                         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
@@ -89,9 +89,29 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
                                     BLACK, BLACK, BLACK,      BLACK, BLACK, BLACK
         // clang-format on
         )},
-      [DK] = {LED_LAYOUT_ALL(BLACK)},
-    [Sym]    = {LED_LAYOUT_ALL(BLACK)},
-    [Media]  = {LED_LAYOUT(
+         [SymQwerty] = {LED_LAYOUT(
+        // clang-format off
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,                         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK,         BLACK,     BLACK,             BLACK, BLACK, BLACK, BLACK, BLACK,
+                                    BLACK, BLACK, BLACK,      BLACK, BLACK, BLACK
+        // clang-format on
+        )},
+         [Nav] = {LED_LAYOUT(
+        // clang-format off
+        BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
+        BLACK, BLACK, BLACK, GREEN, BLACK, BLACK, BLACK,           BLACK, BLACK, ORANG, ORANG, ORANG, BLACK, BLACK,
+        BLACK, BLACK, GREEN, GREEN, GREEN, BLACK, BLACK,           BLACK, BLACK, ORANG, ORANG, ORANG, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLUE , BLACK, RED  ,                         WHITE, ORANG, ORANG, ORANG, BLACK, BLACK,
+        BLACK, BLACK, BLACK, BLACK, BLACK,         BLACK,     BLACK,             BLACK, BLACK, BLACK, BLACK, BLACK,
+                                    BLACK, BLACK, BLACK,      BLACK, BLACK, BLACK
+        // clang-format on
+        )},
+         [DK] = {LED_LAYOUT_ALL(BLACK)},
+    [Sym]       = {LED_LAYOUT_ALL(BLACK)},
+    [Media]     = {LED_LAYOUT(
         // clang-format off
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, RED  , ORANG,
@@ -101,7 +121,7 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
                                     BLACK, BLACK, BLACK,      BLACK, BLACK, BLACK
         // clang-format on
         )},
-     [Fn] = {LED_LAYOUT(
+        [Fn] = {LED_LAYOUT(
         // clang-format off
         BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
         BLACK, RED  , BLACK, BLACK, BLACK, BLACK, BLACK,           BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK,
