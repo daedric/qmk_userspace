@@ -360,7 +360,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
             _______    ,     _______    ,     _______    ,     _______    ,     _______    ,     _______    ,     _______    ,               _______    ,     _______    ,     _______    ,     _______    ,     _______    ,     _______    ,     _______    ,
             _______    ,     KC_TAB     ,     KC_HOME    ,      KC_UP     ,     KC_END     ,     KC_PGUP    ,     _______    ,               _______    ,     KC_PPLS    ,      KC_7      ,      KC_8      ,      KC_9      ,     _______    ,     _______    ,
-            _______    ,     KC_LCAP    , LALT_T(KC_LEFT), LCTL_T(KC_DOWN), LSFT_T(KC_RGHT), LGUI_T(KC_PGDN),     _______    ,               _______    , LGUI_T(KC_PMNS), LSFT_T(KC_4), LCTL_T(KC_5), LALT_T(KC_6),     _______    ,     _______    ,
+            _______    ,     CW_TOGG    , LALT_T(KC_LEFT), LCTL_T(KC_DOWN), LSFT_T(KC_RGHT), LGUI_T(KC_PGDN),     _______    ,               _______    , LGUI_T(KC_PMNS), LSFT_T(KC_4), LCTL_T(KC_5), LALT_T(KC_6),     _______    ,     _______    ,
             _______    ,     _______    ,     _______    ,     KC_INS     ,     KC_RSFT    ,     KC_DEL     ,                        KC_0      ,      KC_1      ,      KC_2      ,      KC_3      ,     _______    ,     _______    ,
             _______    ,     _______    ,     _______    ,     _______    ,     KC_LGUI    ,             _______    ,         _______    ,           _______    ,     _______    ,     _______    ,     _______    ,     _______    ,
                                 _______    ,     _______    ,     _______    ,         _______    ,     _______    ,     _______
