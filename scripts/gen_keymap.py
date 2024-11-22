@@ -1011,7 +1011,9 @@ keymaps = {
         Mode.SymQwerty: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
         _______, KC_CIRC,  KC_LT ,  KC_GT , KC_DLR , KC_PERC, _______,            _______,  KC_AT , KC_AMPR, KC_ASTR, KC_QUOT, KC_GRV , _______,
-        _______, KC_LCBR,LALT_T(KC_LPRN),LCTL_T(KC_RPRN),LSFT_T(KC_RCBR),LGUI_T(KC_EQL), _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
+        _______, KC_LCBR, KC_LPRN,KC_RPRN , KC_RCBR,  KC_EQL, _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
+        // does not work because those kc are shifted version, I need to implement an overide
+        // _______, KC_LCBR,LALT_T(KC_LPRN),LCTL_T(KC_RPRN),LSFT_T(KC_RCBR),LGUI_T(KC_EQL), _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
         _______, KC_TILD, KC_LBRC, KC_RBRC, KC_UNDS, KC_HASH,                              KC_PIPE, KC_EXLM, KC_SCLN, KC_COLN, KC_QUES, _______,
         _______, _______, _______, _______, _______,          _______,            _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,            _______, _______, _______
