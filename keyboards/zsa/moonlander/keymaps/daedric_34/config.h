@@ -29,6 +29,7 @@
 // keyboard does not wake up properly after suspending
 
 #define USB_SUSPEND_WAKEUP_DELAY 0
+#define RETRO_TAPPING
 /* Set by Oryx to their default value:
  * https://github.com/qmk/qmk_firmware/blob/a4da5f219fe0f202a07afa045fc0c08f6ce1f86b/docs/features/rawhid.md#basic-configuration-basic-configuration
  */
