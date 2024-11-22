@@ -1003,7 +1003,7 @@ keymaps = {
         Mode.Qwerty: """
         _______, _______, _______, _______, _______, _______, _______,                    _______, _______, _______, _______, _______, _______, _______,
         _______,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  _______,                    _______, KC_Y,   KC_U,   KC_I,   KC_O, KC_P, _______,
-        _______,   KC_A,LALT_T(KC_S),LCTL_T(KC_D),LSFT_T(KC_F),LGUI_T(KC_G), _______,     _______, LT(Nav|KC_H),LSFT_T(KC_J),LCTL_T(KC_K),LALT_T(KC_L), LT(Media|KC_SCLN), _______,
+        _______,   KC_A,LALT_T(KC_S),LCTL_T(KC_D),LSFT_T(KC_F),LGUI_T(KC_G), _______,     _______, LGUI_T(KC_H),LSFT_T(KC_J),LCTL_T(KC_K),LALT_T(KC_L), LT(Media|KC_SCLN), _______,
         _______,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                       KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, _______,
         _______, _______,  _______, _______, KC_LGUI,         _______,                    _______,          _______, _______, _______, _______, CKC_LMOVE_Base,
                               LSFT_T(KC_ESC),LT(Nav|KC_BSPC), _______,                    _______, LT(Nav|KC_ENTER) , LT(SymQwerty|KC_SPC)
@@ -1011,7 +1011,7 @@ keymaps = {
         Mode.SymQwerty: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
         _______, KC_CIRC,  KC_LT ,  KC_GT , KC_DLR , KC_PERC, _______,            _______,  KC_AT , KC_AMPR, KC_ASTR, KC_QUOT, KC_GRV , _______,
-        _______, KC_LCBR, KC_LPRN, KC_RPRN, KC_RCBR, KC_EQL , _______,            _______, KC_BSLS, KC_PLUS, KC_MINS, KC_SLSH, KC_DQT , _______,
+        _______, KC_LCBR,LALT_T(KC_LPRN),LCTL_T(KC_RPRN),LSFT_T(KC_RCBR),LGUI_T(KC_EQL), _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
         _______, KC_TILD, KC_LBRC, KC_RBRC, KC_UNDS, KC_HASH,                              KC_PIPE, KC_EXLM, KC_SCLN, KC_COLN, KC_QUES, _______,
         _______, _______, _______, _______, _______,          _______,            _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,            _______, _______, _______
@@ -1026,8 +1026,8 @@ keymaps = {
         #  """,
         Mode.Nav: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_TAB , KC_HOME,  KC_UP ,  KC_END, KC_PGUP,  _______,           _______, KC_PPLS,   KC_7 ,   KC_8 ,   KC_9 , _______, _______,
-        _______, KC_LCAP, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,  _______,           _______, KC_PMNS,   KC_4 ,   KC_5 ,   KC_6 , _______, _______,
+        _______, KC_TAB , KC_HOME,  KC_UP ,  KC_END, KC_PGUP, _______,            _______, KC_PPLS,   KC_7 ,   KC_8 ,   KC_9 , _______, _______,
+        _______, KC_LCAP, LALT_T(KC_LEFT),LCTL_T(KC_DOWN),LSFT_T(KC_RGHT),LGUI_T(KC_PGDN), _______,            _______, LGUI_T(KC_PMNS),LSFT_T(KC_4),LCTL_T(KC_5),LALT_T(KC_6), _______, _______,
         _______, _______, _______, _______, KC_RSFT, KC_DEL ,                                KC_0 ,   KC_1 ,   KC_2,    KC_3 , _______, _______,
         _______, _______,  _______, _______, KC_LGUI,         _______,            _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,            _______, _______, _______
