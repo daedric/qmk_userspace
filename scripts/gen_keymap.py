@@ -1008,7 +1008,7 @@ keymaps = {
         _______,   KC_A,LALT_T(KC_S),LCTL_T(KC_D),LSFT_T(KC_F),LGUI_T(KC_G), _______,     _______, LGUI_T(KC_H),LSFT_T(KC_J),LCTL_T(KC_K),LALT_T(KC_L), LT(Media|KC_SCLN), _______,
         _______,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                       KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, _______,
         _______, _______,  _______, _______, KC_LGUI,         _______,                    _______,          _______, _______, _______, _______, CKC_LMOVE_Base,
-                              LSFT_T(KC_ESC),LT(Nav|KC_BSPC), _______,                    _______, LT(Nav|KC_ENTER) , LT(SymQwerty|KC_SPC)
+                              LSFT_T(KC_BSPC),LT(Nav|KC_ESC), _______,                    _______, LT(Nav|KC_ENTER) , LT(SymQwerty|KC_SPC)
         """,
         Mode.SymQwerty: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
