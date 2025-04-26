@@ -111,8 +111,8 @@ class UnaryKCFunction:
         "RCMD_T",
         "RGUI_T",
         "ROPT_T",
-        "RSFT_T",
         "RSA_T",
+        "RSFT_T",
         "RSG_T",
         "RWIN_T",
         "SAGR_T",
@@ -995,12 +995,12 @@ keymaps = {
     },
     "daedric_34": {
         Mode.Base: """
-        _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
-        _______,  EKC_Q ,  EKC_C ,  EKC_O ,  EKC_P ,  EKC_W , _______,            _______,  EKC_J ,  EKC_M ,  EKC_D , EKC_DK ,  EKC_Y , _______,
-        _______,  EKC_A ,  EKC_S ,  EKC_E ,  EKC_N ,  EKC_F , _______,            _______,  EKC_L ,  EKC_R ,  EKC_T ,  EKC_I ,  LT(Media|EKC_U), _______,
-        _______,  EKC_Z ,  EKC_X , EKC_MNS,  EKC_V ,  EKC_B ,                              EKC_DOT,  EKC_H ,  EKC_G ,EKC_COMM,  EKC_K , _______,
-        _______, _______, _______, _______, KC_LGUI,          _______,            _______,          _______, _______, _______, _______, CKC_LMOVE_Qwerty,
-                              LT(Nav|KC_BSPC),LSFT_T(KC_ESC), _______,                    _______, LT(Nav|KC_ENTER), LT(Sym|KC_SPC)
+        _______, _______, _______, _______, _______, _______, _______,                                              _______, _______, _______, _______, _______, _______, _______,
+        _______,  EKC_Q ,  EKC_C ,  EKC_O ,  EKC_P ,  EKC_W , _______,                                              _______,  EKC_J ,  EKC_M ,  EKC_D , EKC_DK ,  EKC_Y , _______,
+        _______,  EKC_A ,  LALT_T(EKC_S),LCTL_T(EKC_E),LSFT_T(EKC_N),LGUI_T(EKC_F), _______,                        _______,LGUI_T(EKC_L),LSFT_T(EKC_R),LCTL_T(EKC_T),LALT_T(EKC_I),  LT(Media|EKC_U), _______,
+        _______,  EKC_Z ,  EKC_X , EKC_MNS,  EKC_V ,  EKC_B ,                                                                 EKC_DOT,  EKC_H ,  EKC_G ,EKC_COMM,  EKC_K , _______,
+        _______, _______, _______, _______, KC_LGUI,          _______,                                              _______,          _______, _______, _______, _______, CKC_LMOVE_Qwerty,
+                              LSFT_T(KC_BSPC),LT(Nav|KC_ESC), _______,                                              _______, LT(Nav|KC_ENTER), LT(Sym|KC_SPC)
         """,
         Mode.Qwerty: """
         _______, _______, _______, _______, _______, _______, _______,                    _______, _______, _______, _______, _______, _______, _______,
@@ -1013,7 +1013,7 @@ keymaps = {
         Mode.SymQwerty: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
         _______, KC_CIRC,  KC_LT ,  KC_GT , KC_DLR , KC_PERC, _______,            _______,  KC_AT , KC_AMPR, KC_ASTR, KC_QUOT, KC_GRV , _______,
-        _______, KC_LCBR, KC_LPRN,KC_RPRN , KC_RCBR,  KC_EQL, _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
+        _______, KC_LCBR, KC_LPRN,KC_RPRN , KC_RCBR,  KC_EQL, _______,            _______, KC_BSLS, KC_PLUS, KC_MINS, KC_SLSH, KC_DQT , _______,
         // does not work because those kc are shifted version, I need to implement an overide
         // _______, KC_LCBR,LALT_T(KC_LPRN),LCTL_T(KC_RPRN),LSFT_T(KC_RCBR),LGUI_T(KC_EQL), _______,            _______, LGUI_T(KC_BSLS), LSFT_T(KC_PLUS), LCTL_T(KC_MINS), LALT_T(KC_SLSH), KC_DQT , _______,
         _______, KC_TILD, KC_LBRC, KC_RBRC, KC_UNDS, KC_HASH,                              KC_PIPE, KC_EXLM, KC_SCLN, KC_COLN, KC_QUES, _______,
@@ -1030,9 +1030,9 @@ keymaps = {
         #  """,
         Mode.Nav: """
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_TAB , KC_HOME,  KC_UP ,  KC_END, KC_PGUP, _______,            _______, KC_PPLS,   KC_7 ,   KC_8 ,   KC_9 , _______, _______,
-        _______, CW_TOGG, LALT_T(KC_LEFT),LCTL_T(KC_DOWN),LSFT_T(KC_RGHT),LGUI_T(KC_PGDN), _______,            _______, LGUI_T(KC_PMNS),LSFT_T(KC_4),LCTL_T(KC_5),LALT_T(KC_6), _______, _______,
-        _______, _______, _______, KC_INS, KC_RSFT, KC_DEL ,                                KC_0 ,   KC_1 ,   KC_2,    KC_3 , _______, _______,
+        _______, KC_TAB , KC_HOME,  KC_UP ,  KC_END, KC_PGUP, _______,            _______, KC_PPLS,   KC_7 ,   KC_8 ,   KC_9 , KC_ASTR, _______,
+        _______, CW_TOGG, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,            _______, KC_PMNS,   KC_4 ,LCTL_T(KC_5),KC_6, KC_EQL , _______,
+        _______, _______, _______, KC_INS, KC_RSFT, KC_DEL ,                                KC_0  ,   KC_1 ,   KC_2,    KC_3 , KC_DOT , _______,
         _______, _______,  _______, _______, KC_LGUI,         _______,            _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,            _______, _______, _______
         """,
