@@ -69,8 +69,10 @@ class CustomKeycode:
 
 
 class ShiftedKeycodes:
-    """Gives every ergol key its shifted keycode on a layer, through an alias, a key
-    override or a custom keycode, and keeps them by their C symbol."""
+    """Realises an ergol key on a layer: an alias (UP/UM) for a unicode keycode, the
+    keycode itself when it equals its shifted keycode, a key override when neither is a
+    unicode keycode, otherwise a custom keycode; keeps the aliases, key overrides and custom
+    keycodes by their C symbol."""
 
     def __init__(self, unicode: dict[int, str]):
         self.unicode = unicode
