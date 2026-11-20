@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from codegen import generate
 from ergol import HOSTS
-from model import Host, Key, Layer
+from model import Host, Key, KeyCode, Layer
 
 REPO = Path(__file__).resolve().parents[2]
 
@@ -46,6 +46,7 @@ def test_hand_written_key_under_an_ergol_key_is_rejected() -> None:
 def test_unicode_base_keycode_is_rejected() -> None:
     host = Host(
         keys={
+            "EKC_W": HOSTS["us"].keys["EKC_W"],
             "EKC_Q": Key(
                 base=0x00E2,  # pyright: ignore[reportArgumentType] the input under test
                 shifted=None,
@@ -53,7 +54,7 @@ def test_unicode_base_keycode_is_rejected() -> None:
                 dk_shifted="KC_TRNS",
                 sym_base="KC_TRNS",
                 sym_shifted="KC_TRNS",
-            )
+            ),
         }
     )
     with pytest.raises(
@@ -91,6 +92,13 @@ def test_custom_keycode_under_a_tap_hold_is_rejected() -> None:
         ),
     ):
         generate({Layer.Base: "LSFT_T(EKC_1)"}, HOSTS["us"], False)
+
+
+def test_mod_tap_is_recognised_only_on_the_whole_cell() -> None:
+    assert KeyCode.parse("LSFT_T(KC_A)").c_expr == "LSFT_T(KC_A)"
+    assert KeyCode.parse("LSFT_T(KC_A)").keycode == "KC_A"
+    assert KeyCode.parse("LSFT_T(KC_A)_X").keycode == "LSFT_T(KC_A)_X"
+    assert KeyCode.parse("LSFT_T(KC_A)_X").tap_hold is None
 
 
 def test_ergol_key_placed_twice_shares_its_alias() -> None:

@@ -62,25 +62,26 @@ class KeyOverride:
 
 
 @dataclass(frozen=True)
-class CustomKeycode:
+class UnicodeShiftKeycode:
     layer: Layer
     keycode: KeyCode
-    shifted_name: str
+    shifted_unicode_name: str
 
 
 class ShiftedKeycodes:
-    """Realises an ergol key on a layer: an alias (UP/UM) for a unicode keycode, the
-    keycode itself when it equals its shifted keycode, a key override when neither is a
-    unicode keycode, otherwise a custom keycode; keeps the aliases, key overrides and custom
+    """The keycode an ergol key types on a layer, with its shifted keycode: an alias
+    (UP/UM) for a unicode keycode, the keycode itself when it equals its shifted keycode,
+    a key override when neither is a unicode keycode, otherwise a unicode shift keycode
+    handled in process_record_user; keeps the aliases, key overrides and unicode shift
     keycodes by their C symbol."""
 
     def __init__(self, unicode: dict[int, str]):
         self.unicode = unicode
         self.aliases: dict[str, str] = {}
         self.key_overrides: dict[str, KeyOverride] = {}
-        self.custom_keycodes: dict[str, CustomKeycode] = {}
+        self.unicode_shift_keycodes: dict[str, UnicodeShiftKeycode] = {}
 
-    def realise(
+    def keycode_for(
         self, layer: Layer, name: str, keycode: KeyCode, shifted: KeyCode
     ) -> KeyCode:
         symbol = f"{layer.name}_{name}"
@@ -99,23 +100,23 @@ class ShiftedKeycodes:
                 layer, keycode, keycode if shifted.is_transparent else shifted
             )
             return keycode
-        return self._custom_keycode(symbol, layer, keycode, shifted)
+        return self._unicode_shift_keycode(symbol, layer, keycode, shifted)
 
     def _alias(self, symbol: str, value: str) -> KeyCode:
         if (defined := self.aliases.setdefault(symbol, value)) != value:
             raise ValueError(f"conflict for {symbol}, we have {defined} and {value}")
         return KeyCode(symbol)
 
-    def _custom_keycode(
+    def _unicode_shift_keycode(
         self, symbol: str, layer: Layer, keycode: KeyCode, shifted: KeyCode
     ) -> KeyCode:
         if (shifted_code_point := shifted.code_point) is None:
             raise ValueError("a custom key must be mapped to an unicode keycode")
-        if keycode.tap_hold or shifted.tap_hold:
+        if keycode.tap_hold:
             raise ValueError(
-                f"custom keycode cannot be created with keycode using special function (LT/OSL/...): {keycode.c}"
+                f"custom keycode cannot be created with keycode using special function (LT/OSL/...): {keycode.c_expr}"
             )
-        self.custom_keycodes[symbol] = CustomKeycode(
+        self.unicode_shift_keycodes[symbol] = UnicodeShiftKeycode(
             layer, keycode, self.unicode[shifted_code_point]
         )
         return KeyCode(symbol)
@@ -139,37 +140,42 @@ def generate(layouts: dict[Layer, str], host: Host, autoshift: bool) -> str:
         raise ValueError("At the moment base keymaps need to be basic")
 
     unicode = unicode_names(host.keys)
-    shifted = ShiftedKeycodes(unicode)
-    layers = _build_layers(layouts, host.keys, shifted)
-    emitted = [
+    shifted_keycodes = ShiftedKeycodes(unicode)
+    layers = _build_layers(layouts, host.keys, shifted_keycodes)
+    used_layers = [
         layer
         for layer, cells in layers.items()
         if any(not cell.is_transparent for row in cells for cell in row)
     ]
-    layer_moves = {f"CKC_LMOVE_{layer.name}": layer for layer in emitted}
+    layer_moves = {f"CKC_LMOVE_{layer.name}": layer for layer in used_layers}
 
     return KEYMAP_C.format(
         extra_include="\n".join(f'#include "{include}"' for include in host.includes),
-        custom_keycodes=",\n".join([*layer_moves, *shifted.custom_keycodes]),
-        layers=",\n".join(layer.name for layer in emitted),
+        custom_keycodes=",\n".join(
+            [*layer_moves, *shifted_keycodes.unicode_shift_keycodes]
+        ),
+        layers=",\n".join(layer.name for layer in used_layers),
         aliases="\n".join(
-            f"#define {name} {value}" for name, value in shifted.aliases.items()
+            f"#define {name} {value}"
+            for name, value in shifted_keycodes.aliases.items()
         ),
         unicode_map=_render_unicode_map(unicode),
-        overrides=_render_key_overrides(shifted.key_overrides),
+        overrides=_render_key_overrides(shifted_keycodes.key_overrides),
         layouts=",\n".join(
             f"[{layer.name}] = LAYOUT({_format_layer(layers[layer])})"
-            for layer in emitted
+            for layer in used_layers
         ),
         custom_process=_render_process_record_user(
-            layer_moves, shifted.custom_keycodes
+            layer_moves, shifted_keycodes.unicode_shift_keycodes
         ),
-        custom_autoshift=_render_autoshift(emitted, shifted) if autoshift else "",
+        custom_autoshift=(
+            _render_autoshift(used_layers, shifted_keycodes) if autoshift else ""
+        ),
     )
 
 
 def _build_layers(
-    layouts: dict[Layer, str], keys: dict[str, Key], shifted: ShiftedKeycodes
+    layouts: dict[Layer, str], keys: dict[str, Key], shifted_keycodes: ShiftedKeycodes
 ) -> dict[Layer, list[list[KeyCode]]]:
     """Every layer: its hand-written layout, or transparent keys, under the keys the
     base layout's ergol keys type on it. On Base an ergol key keeps its tap-hold and
@@ -194,8 +200,10 @@ def _build_layers(
                 keycode, shifted_keycode = pair
                 if layer is Layer.Base:
                     keycode = replace(cell, keycode=keycode.keycode)
-                realised = shifted.realise(layer, name, keycode, shifted_keycode)
-                _place(cells, Coord(row=row, col=col), realised)
+                placed = shifted_keycodes.keycode_for(
+                    layer, name, keycode, shifted_keycode
+                )
+                _place(cells, Coord(row=row, col=col), placed)
         layers[layer] = cells
     return layers
 
@@ -204,17 +212,17 @@ def _place(cells: list[list[KeyCode]], coord: Coord, keycode: KeyCode):
     if keycode.is_transparent:
         return
     previous = cells[coord.row][coord.col]
-    if not previous.is_transparent and previous.c != keycode.c:
-        raise ValueError(f"Key at {coord} is not transparent: {previous.c}")
-    cells[coord.row][coord.col] = KeyCode(keycode.c)
+    if not previous.is_transparent and previous.c_expr != keycode.c_expr:
+        raise ValueError(f"Key at {coord} is not transparent: {previous.c_expr}")
+    cells[coord.row][coord.col] = KeyCode(keycode.c_expr)
 
 
 def _format_layer(cells: list[list[KeyCode]]) -> str:
-    width = max(len(cell.c) for row in cells for cell in row)
-    # A cell that still carries its layout tap-hold (a hand-written key) is emitted
-    # unpadded: the committed keymaps are aligned that way.
+    width = max(len(cell.c_expr) for row in cells for cell in row)
+    # A hand-written tap-hold on a layer other than Base keeps its tap_hold and is
+    # emitted unpadded: the committed keymaps are aligned that way.
     keycodes = [
-        cell.c if cell.tap_hold else f"{cell.c:^{width}}"
+        cell.c_expr if cell.tap_hold else f"{cell.c_expr:^{width}}"
         for row in cells
         for cell in row
     ]
@@ -243,7 +251,7 @@ def _render_unicode_map(unicode: dict[int, str]) -> str:
 
 
 def _render_key_overrides(key_overrides: dict[str, KeyOverride]) -> str:
-    key_override_tpl = "const key_override_t {name} = ko_make_with_layers(MOD_MASK_SHIFT, {key}, {skey}, (1 << {mode}));"
+    key_override_tpl = "const key_override_t {name} = ko_make_with_layers(MOD_MASK_SHIFT, {key}, {skey}, (1 << {layer}));"
     template = """
         {overrides}
 
@@ -256,9 +264,9 @@ def _render_key_overrides(key_overrides: dict[str, KeyOverride]) -> str:
         overrides="\n".join(
             key_override_tpl.format(
                 name=name,
-                key=override.keycode.c,
-                skey=override.shifted.c,
-                mode=override.layer.name,
+                key=override.keycode.c_expr,
+                skey=override.shifted.c_expr,
+                layer=override.layer.name,
             )
             for name, override in key_overrides.items()
         ),
@@ -267,7 +275,8 @@ def _render_key_overrides(key_overrides: dict[str, KeyOverride]) -> str:
 
 
 def _render_process_record_user(
-    layer_moves: dict[str, Layer], custom_keycodes: dict[str, CustomKeycode]
+    layer_moves: dict[str, Layer],
+    unicode_shift_keycodes: dict[str, UnicodeShiftKeycode],
 ) -> str:
     template = """
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {{
@@ -318,14 +327,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {{
         for name, layer in layer_moves.items()
     ] + [
         custom_keycode_case_tpl.format(
-            name=name, kc=custom.keycode.c, skc_name=custom.shifted_name
+            name=name, kc=custom.keycode.c_expr, skc_name=custom.shifted_unicode_name
         )
-        for name, custom in custom_keycodes.items()
+        for name, custom in unicode_shift_keycodes.items()
     ]
     return template.format(cases="\n".join(cases))
 
 
-def _render_autoshift(emitted: list[Layer], shifted: ShiftedKeycodes) -> str:
+def _render_autoshift(
+    used_layers: list[Layer], shifted_keycodes: ShiftedKeycodes
+) -> str:
     guard_tpl = """
             if (IS_LAYER_ON({layer})) return false;
         """
@@ -410,9 +421,9 @@ def _render_autoshift(emitted: list[Layer], shifted: ShiftedKeycodes) -> str:
         """
 
     cases: dict[Layer, list[str]] = defaultdict(list)
-    for override in shifted.key_overrides.values():
+    for override in shifted_keycodes.key_overrides.values():
         cases[override.layer].append(
-            case_tpl.format(kc=override.keycode.c, skc=override.shifted.c)
+            case_tpl.format(kc=override.keycode.c_expr, skc=override.shifted.c_expr)
         )
 
     # Does not work, probably because those keys are handled by the
@@ -422,10 +433,10 @@ def _render_autoshift(emitted: list[Layer], shifted: ShiftedKeycodes) -> str:
     # I wonder whether we could re-emit the custom keycode
     # and handle it in the function
     # Maybe autoshift + override could be replaced with: https://getreuer.info/posts/keyboards/custom-shift-keys/index.html
-    for name, custom in shifted.custom_keycodes.items():
+    for name, custom in shifted_keycodes.unicode_shift_keycodes.items():
         cases[custom.layer].append(
             unicode_case_tpl.format(
-                ckc=name, kc=custom.keycode.c, skc=custom.shifted_name
+                ckc=name, kc=custom.keycode.c_expr, skc=custom.shifted_unicode_name
             )
         )
 
@@ -434,7 +445,9 @@ def _render_autoshift(emitted: list[Layer], shifted: ShiftedKeycodes) -> str:
         for layer, layer_cases in cases.items()
     )
     guard = "\n".join(
-        guard_tpl.format(layer=layer.name) for layer in emitted if layer not in cases
+        guard_tpl.format(layer=layer.name)
+        for layer in used_layers
+        if layer not in cases
     )
     return template.format(
         press=press_user_tpl.format(guard=guard, switch=switches),

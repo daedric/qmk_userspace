@@ -47,7 +47,7 @@ MOD_TAPS = {
 }
 
 LAYER_TAP = re.compile(r"LT\((?P<layer>\w+)\|\s*(?P<keycode>\w+)\)")
-MOD_TAP = re.compile(r"(?P<mod_tap>\w+)\((?P<keycode>\w+)\)")
+UNARY_CALL = re.compile(r"(?P<function>\w+)\((?P<keycode>\w+)\)")
 
 
 class Layer(Enum):
@@ -75,12 +75,12 @@ class KeyCode:
     def parse(cls, text: str) -> "KeyCode":
         if match := LAYER_TAP.fullmatch(text):
             return cls(match["keycode"], f"LT({match['layer']}, {{}})")
-        if (match := MOD_TAP.fullmatch(text)) and match["mod_tap"] in MOD_TAPS:
-            return cls(match["keycode"], f"{match['mod_tap']}({{}})")
+        if (match := UNARY_CALL.fullmatch(text)) and match["function"] in MOD_TAPS:
+            return cls(match["keycode"], f"{match['function']}({{}})")
         return cls(text)
 
     @property
-    def c(self) -> str:
+    def c_expr(self) -> str:
         return (self.tap_hold or "{}").format(self.keycode)
 
     @property
