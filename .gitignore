@@ -11,3 +11,8 @@
 *.uf2
 .direnv/
 __pycache__/
+
+# clangd
+compile_commands.json
+.clangd/
+.cache/

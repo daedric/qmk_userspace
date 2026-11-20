@@ -1,6 +1,6 @@
 # QMK Userspace
 
-This is a template repository which allows for an external set of QMK keymaps to be defined and compiled. This is useful for users who want to maintain their own keymaps without having to fork the main QMK repository.
+This is a template repository which allows for an external set of QMK keymaps to be defined and compiled. This is useful for users who want to maintain their own keymaps without having to fork the [main QMK repository](https://github.com/qmk/qmk_firmware). You must still fork the main QMK repository if writing firmware for a *new* keyboard.
 
 ## Howto configure your build targets
 
@@ -16,7 +16,7 @@ This is a template repository which allows for an external set of QMK keymaps to
 1. Add your keymap(s) to the build by running `qmk userspace-add -kb <your_keyboard> -km <your_keymap>`
     * This will automatically update your `qmk.json` file
     * Corresponding `qmk userspace-remove -kb <your_keyboard> -km <your_keymap>` will delete it
-    * Listing the build targets can be done with with `qmk userspace-list`
+    * Listing the build targets can be done with `qmk userspace-list`
 1. Commit your changes
 
 ## Howto build with GitHub
