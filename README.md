@@ -64,3 +64,16 @@ This can also be used to control which fork is used, though only upstream `qmk_f
 To generate the keymap:
 
     python scripts/gen_keymap.py | clang-format > keyboards/zsa/moonlander/keymaps/ergol/keymap.c
+
+## Building locally
+
+The local build uses the `qmk_firmware` checkout named by `qmk config user.qmk_home`, on
+upstream release `0.34.8`; GitHub Actions build against upstream `master`. Older checkouts
+(late 2024) no longer run with the Python of current nixpkgs (`module 'ast' has no attribute
+'Num'`). In `nix-shell`: `qmk compile -kb zsa/moonlander -km daedric_34`.
+
+## Unicode input
+
+Characters outside the US layout are typed as `Ctrl+Shift+U`, hex code point, `Space`, which
+needs an input method (fcitx5) on the Linux host: see [docs/unicode-input.md](docs/unicode-input.md)
+([français](docs/unicode-input.fr.md)).
