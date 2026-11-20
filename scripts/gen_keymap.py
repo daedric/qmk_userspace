@@ -1,13 +1,12 @@
-from collections import defaultdict
-import itertools
-from dataclasses import dataclass
-import copy
-from enum import Enum
-from typing import Generator
-from unicodedata import name as unicode_name
-import re
 import argparse
-
+import copy
+import itertools
+import re
+from collections import defaultdict
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Generator
+from unicodedata import name as unicode_name
 
 parser = argparse.ArgumentParser(description="Process keymap options.")
 parser.add_argument(
@@ -54,11 +53,12 @@ class ShiftMode(Enum):
     UnicodeMap = 3
 
 
-def is_basic(kc) -> bool:
+def is_basic(kc: str|int) -> bool:
+
     return isinstance(kc, str)
 
 
-def is_unicode(kc) -> bool:
+def is_unicode(kc: str|int) -> bool:
     return isinstance(kc, int)
 
 
@@ -492,7 +492,7 @@ ergol_keys = {
 
 
 class Gen:
-    file_tpl = """
+    file_tpl: str = """
         #include QMK_KEYBOARD_H
 
         #include <stdint.h>
@@ -526,7 +526,7 @@ class Gen:
     {custom_autoshift}
     """
 
-    def __init__(self, host, kms: "Keymaps", autoshift=False):
+    def __init__(self, host: str, kms: "Keymaps", autoshift: bool = False):
         self.host = host
         self.keymaps = kms
         self.autoshift = autoshift
@@ -881,6 +881,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {{
     def _gen(self, m: Mode):
         l = self.keymaps.add_layer(m)
         for n, coord in self.keymaps.base_keys():
+            # import pdb
+            # if m == Mode.Base and n.has_function:
+            #     print(n)
+            #     pdb.set_trace()
             key = self.keys.get(n.raw_keycode)
             if not key:
                 if m == Mode.Base:
@@ -1032,7 +1036,7 @@ keymaps = {
         _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, _______, _______, _______, _______,
         _______, KC_TAB , KC_HOME,  KC_UP ,  KC_END, KC_PGUP, _______,            _______, KC_PPLS,   KC_7 ,   KC_8 ,   KC_9 , KC_ASTR, _______,
         _______, CW_TOGG, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,            _______, KC_PMNS,   KC_4 ,LCTL_T(KC_5),KC_6, KC_EQL , _______,
-        _______, _______, _______, KC_INS, KC_RSFT, KC_DEL ,                                KC_0  ,   KC_1 ,   KC_2,    KC_3 , KC_DOT , _______,
+        _______, _______, _______, KC_INS,  KC_RALT, KC_DEL ,                                KC_0  ,   KC_1 ,   KC_2,    KC_3 , KC_DOT , _______,
         _______, _______,  _______, _______, KC_LGUI,         _______,            _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,            _______, _______, _______
         """,
