@@ -10,3 +10,4 @@
 *.bin
 *.uf2
 .direnv/
+__pycache__/

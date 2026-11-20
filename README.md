@@ -63,7 +63,9 @@ This can also be used to control which fork is used, though only upstream `qmk_f
 
 To generate the keymap:
 
-    python scripts/gen_keymap.py | clang-format > keyboards/zsa/moonlander/keymaps/ergol/keymap.c
+    python scripts/gen_keymap | clang-format > keyboards/zsa/moonlander/keymaps/ergol/keymap.c
+
+The generator's tests, in `nix-shell`: `pytest scripts/gen_keymap`.
 
 ## Building locally
 
